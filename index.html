@@ -847,6 +847,41 @@
     animateCounters();
     updateTimer();
     setInterval(updateTimer, 1000);
+    <script>
+  function reportIframeHeight() {
+    var height = Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    ) + 100;
+
+    window.parent.postMessage({
+      type: 'iframeHeight',
+      height: height
+    }, '*');
+  }
+
+  window.addEventListener('load', function() {
+    reportIframeHeight();
+
+    setTimeout(reportIframeHeight, 300);
+    setTimeout(reportIframeHeight, 1000);
+    setTimeout(reportIframeHeight, 2000);
+  });
+
+  window.addEventListener('resize', reportIframeHeight);
+
+  if (window.ResizeObserver) {
+    var resizeObserver = new ResizeObserver(function() {
+      reportIframeHeight();
+    });
+
+    resizeObserver.observe(document.body);
+  }
+
+  setInterval(reportIframeHeight, 1000);
   </script>
 </body>
 </html>
