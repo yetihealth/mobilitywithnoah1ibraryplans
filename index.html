@@ -801,6 +801,13 @@
     animateCounters();
     updateTimer();
     setInterval(updateTimer, 1000);
+    
+    // ↓ 新增：回報高度給外層 Elementor
+    function reportHeight() {
+      window.parent.postMessage({ type: 'iframeHeight', height: document.body.scrollHeight }, '*');
+    }
+    reportHeight();
+    new ResizeObserver(reportHeight).observe(document.body);
   </script>
 </body>
 </html>
